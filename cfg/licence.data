@@ -1,0 +1,5 @@
+classes= 1
+train = ../license-plate-recognition/cfg/train.txt
+valid = ../license-plate-recognition/cfg/val.txt
+names = ../license-plate-recognition/cfg/licence.names
+backup = ../license-plate-recognition/cfg/weights/
