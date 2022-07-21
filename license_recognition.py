@@ -13,7 +13,7 @@ reader = easyocr.Reader(['en'],gpu=True)
 
 def tesseract_read(img, boxes):
     results =  []
-
+    
     if len(boxes) > 0:
         for (x, y, w, h) in boxes:
 
@@ -53,7 +53,7 @@ def tesseract_read(img, boxes):
             cv2.FONT_HERSHEY_SIMPLEX, 1.2, (0, 0, 255), 3)
     # show the output image
     cv2.namedWindow("Tesseract Detection", cv2.WINDOW_NORMAL)
-    cv2.resizeWindow("Tesseract Detection", 1920, 1080)
+    cv2.resizeWindow("Tesseract Detection", 1280, 720)
     cv2.imshow("Tesseract Detection", output)
 
 def EasyOCR_read(img, boxes,gpu=False):
@@ -104,7 +104,7 @@ def EasyOCR_read(img, boxes,gpu=False):
             cv2.FONT_HERSHEY_SIMPLEX, 1.2, (0, 0, 255), 3)
     # show the output image
     cv2.namedWindow("EasyOCR Detection", cv2.WINDOW_NORMAL)
-    cv2.resizeWindow("EasyOCR Detection", 1920, 1080)
+    cv2.resizeWindow("EasyOCR Detection", 1280, 720)
     cv2.imshow("EasyOCR Detection", output)
             
 
@@ -144,15 +144,23 @@ def get_yolo_preds(net, img, confidence_threshold, overlapping_threshold, labels
                 classIDs.append(classID)
 
     # Remove overlapping bounding boxes
-    bboxes = cv2.dnn.NMSBoxes(boxes, confidences, confidence_threshold, overlapping_threshold)
-    print(len(bboxes))
-    if len(bboxes) > 0:
-        for i in bboxes.flatten():
+    boxes_id = cv2.dnn.NMSBoxes(boxes, confidences, confidence_threshold, overlapping_threshold)
+    # print(boxes)
+    # print(len(bboxes))
+    # print(bboxes)
+    bboxes = []
+
+    if len(boxes_id) > 0:
+        for i in boxes_id.flatten():
+            bboxes.append(boxes[i])
             (x, y) = (boxes[i][0], boxes[i][1])
             (w, h) = (boxes[i][2], boxes[i][3])
             color = (0, 0, 255)
             cv2.rectangle(img, (x, y), (x + w, y + h), color, 2)
             text = "{}: {:.4f}".format(labels[classIDs[i]], confidences[i])
+            
+            tmp = [labels[classIDs[i]], confidences[i], boxes[i]]
+            print(tmp)
 
             # draw bounding box title background
             text_offset_x = x
@@ -166,10 +174,12 @@ def get_yolo_preds(net, img, confidence_threshold, overlapping_threshold, labels
             cv2.putText(img, text, (x, y - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, text_color, 1)
 
     cv2.namedWindow("YOLOv4 Object Detection", cv2.WINDOW_NORMAL)
-    cv2.resizeWindow("YOLOv4 Object Detection", 1920, 1080)
+    cv2.resizeWindow("YOLOv4 Object Detection", 1280, 720)
     cv2.imshow("YOLOv4 Object Detection", img)
 
-    return boxes
+    print(bboxes)
+
+    return bboxes
 
 
 if __name__ == '__main__':
@@ -234,7 +244,7 @@ if __name__ == '__main__':
                 print("Error opening vido")
                 # quit()
             cv2.namedWindow("YOLOv4 Object Detection", cv2.WINDOW_NORMAL)
-            cv2.resizeWindow("YOLOv4 Object Detection", 1920, 1080)
+            cv2.resizeWindow("YOLOv4 Object Detection", 1280, 720)
 
             counter = 0
             start = time.time()

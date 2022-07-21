@@ -50,11 +50,11 @@ gpu_usgage: `--gpu` or `--no-gpu`
 
 #### Import Image
 ```bash
-python license_recognition.py -m image -i test1.jpg --gpu
+python license_recognition.py -m image -i res/test1.jpg --gpu
 ```
 #### Import Video
 ```bash
-python license_recognition.py -m video -i highway.mp4 --gpu
+python license_recognition.py -m video -i res/highway.mp4 --gpu
 ```
 
 ### OpenCV Image Process
